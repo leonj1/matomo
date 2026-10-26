@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   milestone:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     steps:
       - name: Ensure PR has an open milestone
         uses: actions/github-script@v9

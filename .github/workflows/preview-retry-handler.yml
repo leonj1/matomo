@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   retry_or_notify:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 5
     # Only act on scheduled runs that ended in failure. Manual dispatches
     # of the preview build stay opt-in (no auto-retry, no Slack ping) so

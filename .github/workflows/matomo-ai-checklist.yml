@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   AiChecklist:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     strategy:
       fail-fast: false
     steps:

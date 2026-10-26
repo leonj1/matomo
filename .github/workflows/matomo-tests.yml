@@ -56,7 +56,7 @@ concurrency:
 jobs:
   PHP:
     name: PHP (UnitTests, ${{ matrix.environment.php }}, ${{ matrix.environment.adapter }}, ${{ matrix.environment.mysql-engine }}, ${{ matrix.environment.mysql-version }})
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     strategy:
       fail-fast: ${{ inputs.is_preview == true }}
       matrix:
@@ -96,7 +96,7 @@ jobs:
           testomatio-force-report: ${{ contains('schedule,push', github.event_name) && github.run_attempt < 2 }}
   PHP-extra:
     name: PHP (${{ matrix.type }}, ${{ matrix.environment.php }}, ${{ matrix.environment.adapter }}, ${{ matrix.environment.mysql-engine }}, ${{ matrix.environment.mysql-version }})
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     strategy:
       fail-fast: ${{ inputs.is_preview == true }}
       matrix:
@@ -127,7 +127,7 @@ jobs:
           testomatio-force-report: ${{ contains('schedule,push', github.event_name) && github.run_attempt < 2 }}
   PHP-integration-core:
     name: PHP (IntegrationTestsCore, bucket ${{ matrix.bucket }}/10, ${{ matrix.environment.php }}, ${{ matrix.environment.adapter }}, ${{ matrix.environment.mysql-engine }}, ${{ matrix.environment.mysql-version }})
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     strategy:
       fail-fast: ${{ inputs.is_preview == true }}
       max-parallel: ${{ fromJson(vars.MATOMO_INTEGRATION_CORE_MAX_PARALLEL || '10') }}
@@ -169,7 +169,7 @@ jobs:
           testomatio-force-report: ${{ contains('schedule,push', github.event_name) && github.run_attempt < 2 }}
   PHP-integration-plugins:
     name: PHP (IntegrationTestsPlugins, bucket ${{ matrix.bucket }}/10, ${{ matrix.environment.php }}, ${{ matrix.environment.adapter }}, ${{ matrix.environment.mysql-engine }}, ${{ matrix.environment.mysql-version }})
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     strategy:
       fail-fast: ${{ inputs.is_preview == true }}
       max-parallel: ${{ fromJson(vars.MATOMO_INTEGRATION_PLUGINS_MAX_PARALLEL || '10') }}
@@ -211,7 +211,7 @@ jobs:
           testomatio-force-report: ${{ contains('schedule,push', github.event_name) && github.run_attempt < 2 }}
   PHP-system-plugins:
     name: PHP (SystemTestsPlugins, bucket ${{ matrix.bucket }}/10, ${{ matrix.environment.php }}, ${{ matrix.environment.adapter }}, ${{ matrix.environment.mysql-engine }}, ${{ matrix.environment.mysql-version }})
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     strategy:
       fail-fast: ${{ inputs.is_preview == true }}
       max-parallel: ${{ fromJson(vars.MATOMO_SYSTEM_PLUGINS_MAX_PARALLEL || '10') }}
@@ -264,7 +264,7 @@ jobs:
           if-no-files-found: warn
   PHP-system-plugins-collect:
     name: PHP (SystemTestsPlugins, collect)
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     needs: [ PHP-system-plugins ]
     env:
       ARTIFACTS_PASS: ${{ secrets.ARTIFACTS_PASS }}
@@ -301,7 +301,7 @@ jobs:
           BUCKET_FILES_DIR: bucket-files
         run: bash matomo/.github/scripts/aggregate-bucket-artifacts.sh
   Javascript:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
@@ -318,7 +318,7 @@ jobs:
           php-version: '7.2'
           node-version: '12'
   Client:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
@@ -335,7 +335,7 @@ jobs:
           node-version: '16'
           mysql-service: false
   generate-plugin-ui-matrices:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     outputs:
       plugin_matrix: ${{ steps.generate.outputs.plugin_matrix }}
       plugin_count: ${{ steps.generate.outputs.plugin_count }}
@@ -367,7 +367,7 @@ jobs:
   UI-plugins:
     needs: generate-plugin-ui-matrices
     if: ${{ needs.generate-plugin-ui-matrices.outputs.plugin_count != '0' }}
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 30
     strategy:
       fail-fast: ${{ inputs.is_preview == true }}
@@ -406,7 +406,7 @@ jobs:
           upload-artifacts: true
           testomatio: ${{ secrets.TESTOMATIO_INTEGRATION }}
   UI-core:
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     timeout-minutes: 30
     strategy:
       fail-fast: ${{ inputs.is_preview == true }}
@@ -444,7 +444,7 @@ jobs:
     name: All required tests passed
     if: ${{ always() }}
     needs: [ PHP, PHP-integration-core, PHP-integration-plugins, PHP-system-plugins, PHP-system-plugins-collect, Javascript, Client, generate-plugin-ui-matrices, UI-plugins, UI-core ]
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     steps:
       - name: Verify required jobs succeeded
         uses: actions/github-script@v9

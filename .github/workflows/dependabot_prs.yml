@@ -18,7 +18,7 @@ permissions:
 jobs:
   handle_npm_update:
     name: Handle NPM dependency updates for production packages
-    runs-on: ubuntu-24.04
+    runs-on: [self-hosted, linux, x64]
     if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
       - name: Dependabot metadata
